@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeoTools — 测绘坐标工具箱</title>
+<!--
+  proj4js 本地化说明：
+  请从 https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js
+  下载文件保存为 ./lib/proj4.js，以支持离线使用。
+  当前使用 CDN 回退。
+-->
+<script>
+  // 尝试本地 proj4，失败则动态加载 CDN
+  (function() {
+    var s = document.createElement('script');
+    s.src = './lib/proj4.js';
+    s.onerror = function() {
+      var fallback = document.createElement('script');
+      fallback.src = 'https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js';
+      document.head.appendChild(fallback);
+    };
+    document.head.appendChild(s);
+  })();
+</script>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ══ 顶部导航栏 ══ -->
+  <header id="topbar">
+    <div id="topbar-brand">
+      <span class="brand-icon">⊕</span>
+      <span class="brand-name">GeoTools</span>
+      <span class="brand-sub">测绘坐标工具箱</span>
+    </div>
+    <nav id="topbar-nav">
+      <button class="nav-btn active" data-module="format-convert">
+        <span class="nav-label">A</span>
+        格式转换
+      </button>
+      <button class="nav-btn" data-module="projection">
+        <span class="nav-label">B</span>
+        坐标系转换
+      </button>
+      <button class="nav-btn" data-module="param-transform">
+        <span class="nav-label">C</span>
+        参数变换
+      </button>
+    </nav>
+    <div id="topbar-coords">
+      <!-- 右上角显示当前时间，测绘作业记录用 -->
+      <span id="clock"></span>
+    </div>
+  </header>
+
+  <!-- ══ 模块容器 ══ -->
+  <main id="module-container">
+    <div id="module-format-convert" class="module active"></div>
+    <div id="module-projection"     class="module"></div>
+    <div id="module-param-transform" class="module"></div>
+  </main>
+
+  <!-- ══ 状态栏 ══ -->
+  <footer id="statusbar">
+    <span id="status-msg">就绪</span>
+    <span id="status-right">
+      <span class="status-item" id="status-proj4">proj4 加载中…</span>
+    </span>
+  </footer>
+
+</div>
+
+<!-- 模块脚本（顺序加载） -->
+<script src="./modules/matrix-utils.js"></script>
+<script src="./modules/format-convert.js"></script>
+<script src="./modules/projection.js"></script>
+<script src="./modules/param-transform.js"></script>
+<script src="./modules/app.js"></script>
+
+</body>
+</html>
