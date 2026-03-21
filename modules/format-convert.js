@@ -16,28 +16,28 @@ const FormatConvert = (() => {
   const INPUT_FORMATS = [
     {
       id: 'dms_symbol',
-      label: 'DD°MM\'SS"',
+      label: 'DD°MM\'SS.ss"',
       example: '118°23\'45.678"',
       hint: '带符号，支持 ° ′ ″ 等变体，如 118°23\'45.678" 或 -39°12\'33.4"',
       parse: parseDmsSymbol,
     },
     {
       id: 'dms_space',
-      label: 'DD MM SS',
+      label: 'DD MM SS.ss',
       example: '118 23 45.678',
       hint: '空格分隔三段，如 118 23 45.678 或 -39 12 33.4',
       parse: parseDmsSpace,
     },
     {
       id: 'dms_dash',
-      label: 'DD-MM-SS',
+      label: 'DD-MM-SS.ss',
       example: '118-23-45.678',
       hint: '连字符分隔，如 118-23-45.678 或 -39-12-33.4',
       parse: parseDmsDash,
     },
     {
       id: 'dms_concat',
-      label: 'DDMMSS（拼接）',
+      label: 'DDMMSS.ss（拼接）',
       example: '1182345.678',
       hint: '度分秒直接拼接，无分隔符，度为 2 或 3 位，如 1182345.678 或 391233.4',
       parse: parseDmsConcat,
@@ -254,14 +254,7 @@ const FormatConvert = (() => {
             <label class="field-label">输出格式</label>
             <div class="format-selector" id="fc-batch-out-fmt"></div>
 
-            <div style="height:12px"></div>
-            <label class="field-label">输出精度（对十进制度有效）</label>
-            <select id="fc-precision" style="width:160px">
-              <option value="4">4 位小数（~11m）</option>
-              <option value="6" selected>6 位小数（~0.11m）</option>
-              <option value="8">8 位小数（~1.1mm）</option>
-              <option value="10">10 位小数</option>
-            </select>
+
           </div>
         </div>
 
@@ -397,9 +390,8 @@ const FormatConvert = (() => {
     const raw = document.getElementById('fc-batch-input').value;
     if (!raw.trim()) { setStatus('请粘贴要转换的数据'); return; }
 
-    const precision = parseInt(document.getElementById('fc-precision').value, 10);
-    const inFmt     = INPUT_FORMATS.find(f => f.id === batchInputFmt);
-    const outFmt    = OUTPUT_FORMATS.find(f => f.id === batchOutputFmt);
+    const inFmt  = INPUT_FORMATS.find(f => f.id === batchInputFmt);
+    const outFmt = OUTPUT_FORMATS.find(f => f.id === batchOutputFmt);
     if (!inFmt || !outFmt) return;
 
     const lines = raw.split(/\r?\n/);
@@ -414,14 +406,8 @@ const FormatConvert = (() => {
       if (!cell) return;
 
       try {
-        const dd = inFmt.parse(cell);
-        // 十进制系输出格式使用用户选择的精度
-        let out;
-        if (['decimal_6', 'decimal_8'].includes(outFmt.id)) {
-          out = dd.toFixed(precision);
-        } else {
-          out = outFmt.format(dd);
-        }
+        const dd  = inFmt.parse(cell);
+        const out = outFmt.format(dd);
         results.push(out);
         ok++;
       } catch (e) {
