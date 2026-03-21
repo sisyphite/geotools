@@ -368,9 +368,11 @@ const Projection = (() => {
 
   function renderPresetOptions(defaultIdx = 0) {
     return PRESETS.map((p, i) => {
-      if (p.proj4str === null) {
+      // 纯分隔行：id 以 __sep 开头，禁用不可选
+      if (p.id.startsWith('__sep')) {
         return `<option disabled>${p.label}</option>`;
       }
+      // 自定义选项：可选，但无 proj4str
       return `<option value="${p.id}" ${i === defaultIdx ? 'selected' : ''}>${p.label}</option>`;
     }).join('');
   }
