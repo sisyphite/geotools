@@ -600,9 +600,17 @@ const ParamTransform = (() => {
         container.querySelectorAll('.pt-tab').forEach(t => t.classList.remove('active'));
         e.target.classList.add('active');
         mode = e.target.dataset.mode;
-        srcText.value = dstText.value = '';
+        
         srcStatus.textContent = dstStatus.textContent = '';
         previewSec.style.display = globalWarn.style.display = 'none';
+        if (srcText.value !== ''){
+        srcText.dispatchEvent(new Event('input', { bubbles: true }));
+srcText.dispatchEvent(new Event('change', { bubbles: true }));}
+        if (dstText.value !== ''){
+        dstText.dispatchEvent(new Event('input', { bubbles: true }));
+dstText.dispatchEvent(new Event('change', { bubbles: true }));}
+        
+        
         resultPanel.innerHTML = `<div class="pt-result-placeholder">
           <span class="pt-placeholder-icon">⊕</span><span>计算结果将在此显示</span></div>`;
       });
