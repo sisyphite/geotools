@@ -412,13 +412,13 @@ const ParamTransform = (() => {
         warnings.push(`[${label}] 第 ${li + 1} 行检测到 Z 列，四参数模式下已忽略`);
       }
 
-      if (seenIds.has(id)) {
-        warnings.push(`[${label}] 点号 "${id}" 重复出现，将使用后出现的值`);
-        points[seenIds.get(id)] = pt;
-      } else {
-        seenIds.set(id, points.length);
-        points.push(pt);
-      }
+if (seenIds.has(id)) {
+    warnings.push(`[${label}] 点号 "${id}" 重复出现，将使用后出现的值`);
+    Object.assign(seenIds.get(id), pt);  // 原地覆盖，索引不变
+} else {
+    points.push(pt);
+    seenIds.set(id, pt);  // 存对象引用，不存索引
+}
     }
 
     return { points, warnings };
@@ -603,17 +603,11 @@ const ParamTransform = (() => {
         
         srcStatus.textContent = dstStatus.textContent = '';
         previewSec.style.display = globalWarn.style.display = 'none';
-        if (srcText.value !== ''){
-        srcText.dispatchEvent(new Event('input', { bubbles: true }));
-srcText.dispatchEvent(new Event('change', { bubbles: true }));}
-        if (dstText.value !== ''){
-        dstText.dispatchEvent(new Event('input', { bubbles: true }));
-dstText.dispatchEvent(new Event('change', { bubbles: true }));}
-        
-        
         resultPanel.innerHTML = `<div class="pt-result-placeholder">
           <span class="pt-placeholder-icon">⊕</span><span>计算结果将在此显示</span></div>`;
-      });
+        if (srcText.value.trim() || dstText.value.trim()) {
+            updatePreview();
+        }
     });
 
     container.querySelector('#pt-calc-btn').addEventListener('click', () => {
@@ -707,7 +701,10 @@ dstText.dispatchEvent(new Event('change', { bubbles: true }));}
         <div class="pt-section-title">Proj4 towgs84 参考</div>
         <div class="pt-code-block" id="pt-proj4-str">+towgs84=${towgs}</div>
         <button class="pt-btn-sm" id="pt-copy-proj4">复制</button>
-        <p class="pt-note">注：towgs84 参数用于 proj4 坐标系定义，仅供参考，实际使用请核对坐标系约定。</p>`;
+        <p class="pt-note">
+          注：此处将平面旋转角 θ 置入 ωz，ωx/ωy 置零。仅当两坐标系旋转轴严格平行于 Z 轴时在数学上等价。
+          用于 proj4/EPSG towgs84 前请核实该假设是否成立，不满足时需改用七参数。
+        </p>;
     }
 
     panel.innerHTML = `
@@ -834,11 +831,12 @@ dstText.dispatchEvent(new Event('change', { bubbles: true }));}
     URL.revokeObjectURL(url);
   }
   // 获取本地时间表示
-  function getLocaltime(){
-    offset = 8 * 60;
-    const now = new Date(Date.now() + offset * 60 * 1000);
-    return now.toISOString().replace('T', '_').replace(/:/g, '-').replace(/\..+/, '');
-  }
+function getLocaltime() {
+  const now = new Date();
+  const pad = (n, len = 2) => String(n).padStart(len, '0');
+  return `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}` +
+         `_${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
+}
   // ════════════════════════════════════════════════════════════
   //  样式注入
   // ════════════════════════════════════════════════════════════
