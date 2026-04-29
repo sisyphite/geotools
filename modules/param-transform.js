@@ -795,18 +795,18 @@ const ParamTransform = (() => {
     txt += line('【齐次变换矩阵】');
     const mat = is3D ? res.matrix4 : res.matrix;
     txt += line('// 空格分隔:');
-    txt += line('-'.repeat(60);
+    txt += line('-'.repeat(60));
     mat.forEach(row => {
       txt += line(row.map(v => fmtMatrix(v).padStart(18)).join(' '));
     });
-    txt += line('-'.repeat(60);
+    txt += line('-'.repeat(60));
     txt += line('');
     txt += line('// 逗号分隔:');
-    txt += line('-'.repeat(60);
+    txt += line('-'.repeat(60));
     mat.forEach(row => {
       txt += line(row.map(v => fmtMatrix(v).padStart(18)).join(', '));
     });    
-    txt += line('-'.repeat(60);
+    txt += line('-'.repeat(60));
     txt += line('');
     txt += line('【各点残差】');
     const ptIds = res.ptIds || res.residuals.map((_, i) => String(i + 1));
