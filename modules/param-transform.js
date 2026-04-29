@@ -792,9 +792,9 @@ const ParamTransform = (() => {
     txt += line(`  坐标分量中误差：${res.rmse.toFixed(6)} m`);
     txt += line(`  点位中误差：${res.rmsePos.toFixed(6)} m`);
     txt += line('');
-    txt += line('【变换矩阵（自适应精度，定点格式）】');
+    txt += line('【齐次变换矩阵】');
     const mat = is3D ? res.matrix4 : res.matrix;
-    txt += line('// 空格分隔:')
+    txt += line('// 空格分隔:');
     txt += line('-'repeat(60);
     mat.forEach(row => {
       txt += line(row.map(v => fmtMatrix(v).padStart(18)).join(' '));
