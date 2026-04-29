@@ -817,7 +817,7 @@ const ParamTransform = (() => {
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a');
     a.href     = url;
-    a.download = `param-transform-${Date.now()}.txt`;
+    a.download = `GeotoolsParams${getLocaltime()}.txt`;
 
     // FIX-E：Safari 要求 <a> 在 DOM 中才能触发下载；创建后 append，click，再立即移除。
     document.body.appendChild(a);
@@ -825,7 +825,12 @@ const ParamTransform = (() => {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }
-
+  // 获取本地时间表示
+  function getLocaltime(){
+    offset = 8 * 60;
+    const now = new Date(Date.now() + offset * 60 * 1000);
+    return now.toISOString().replace('T', '_').replace(/:/g, '-').replace(/\..+/, '');
+  }
   // ════════════════════════════════════════════════════════════
   //  样式注入
   // ════════════════════════════════════════════════════════════
