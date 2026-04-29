@@ -719,8 +719,8 @@ const ParamTransform = (() => {
         </div>
         ${proj4Html ? `<div class="pt-res-section">${proj4Html}</div>` : ''}
         <div class="pt-res-section">
-          <button class="pt-btn-sm" id="pt-export-txt">导出文本报告</button>
-          <button class="pt-btn-sm" id="pt-copy-matrix">复制矩阵（JSON）</button>
+          <button class="pt-btn-sm" id="pt-export-txt">导出结果</button>
+          
         </div>
       </div>`;
 
@@ -733,13 +733,7 @@ const ParamTransform = (() => {
         });
       });
     }
-    panel.querySelector('#pt-copy-matrix').addEventListener('click', () => {
-      const btn = panel.querySelector('#pt-copy-matrix');
-      navigator.clipboard.writeText(JSON.stringify(is3D ? res.matrix4 : res.matrix, null, 2)).then(() => {
-        btn.textContent = '已复制 ✓';
-        setTimeout(() => { btn.textContent = '复制矩阵（JSON）'; }, 1500);
-      });
-    });
+
     panel.querySelector('#pt-export-txt').addEventListener('click', () => exportReport(res, is3D));
   }
 
