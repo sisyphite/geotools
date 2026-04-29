@@ -910,7 +910,7 @@ const ParamTransform = (() => {
 }`;
             styleHost.appendChild(style);
         }
-
-        return { render };
     }
+    return { render };
+
 })();
