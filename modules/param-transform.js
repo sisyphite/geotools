@@ -796,12 +796,12 @@ const ParamTransform = (() => {
     const mat = is3D ? res.matrix4 : res.matrix;
     txt += line('// 空格分隔:')
     mat.forEach(row => {
-      txt += line(row.map(v => fmtMatrix(v).padStart(18)).join('  '));
+      txt += line(row.map(v => fmtMatrix(v).padStart(12)).join(' '));
     });
     txt += line('');
     txt += line('// 逗号分隔:');
     mat.forEach(row => {
-      txt += line(row.map(v => fmtMatrix(v).padStart(18)).join(', '));
+      txt += line(row.map(v => fmtMatrix(v).padStart(12)).join(', '));
     });    
     txt += line('');
     txt += line('【各点残差】');
