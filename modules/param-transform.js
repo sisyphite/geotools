@@ -825,7 +825,7 @@ const ParamTransform = (() => {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `geoparams${getLocaltime()}.txt`;
+            a.download = `Parameters${getLocaltime()}.txt`;
 
             // FIX-E：Safari 要求 <a> 在 DOM 中才能触发下载；创建后 append，click，再立即移除。
             document.body.appendChild(a);
