@@ -633,6 +633,8 @@ const ParamTransform = (() => {
 
                 const result = is3D ? calcSevenParams(srcPts, dstPts) : calcFourParams(srcPts, dstPts);
                 result.ptIds = ptIds;
+                result.srcPts = srcPts;
+                result.dstPts = dstPts;
                 if (warnings.length) result.matchWarnings = warnings;
                 renderResult(resultPanel, result, is3D);
             } catch (err) {
@@ -763,11 +765,27 @@ const ParamTransform = (() => {
             const p = res.params;
             const line = s => s + '\n';
             let txt = '';
+
             txt += line('═'.repeat(60));
             txt += line('  GeoTools 变换参数反算报告');
             txt += line(`  类型：${res.type} `);
             txt += line(`  生成时间：${new Date().toLocaleString()} `);
             txt += line('═'.repeat(60));
+            txt += line('');
+            txt += line('【源点组】');
+            txt += line('-'.repeat(60));
+            
+            
+            let srcIdIterator = res.ptIds[Symbol.iterator]() || res.srcPts.keys();
+            res.srcPts.forEach(p => txt += line(`  ${srcIdIterator.next().value}, ${p.x.toFixed(6)}, ${p.y.toFixed(6)}, ${p.z.toFixed(6)}`));
+            txt += line('-'.repeat(60));
+            txt += line('');
+            txt += line('【目标点组】');
+            txt += line('-'.repeat(60));
+            
+            let dstIdIterator = res.ptIds[Symbol.iterator]() || res.dstPts.keys();
+            res.dstPts.forEach(p => txt += line(`  ${dstIdIterator.next().value}, ${p.x.toFixed(6)}, ${p.y.toFixed(6)}, ${p.z.toFixed(6)}`));
+            txt += line('-'.repeat(60));
             txt += line('');
             txt += line('【变换参数】');
             if (!is3D) {
