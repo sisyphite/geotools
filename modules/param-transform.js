@@ -828,6 +828,17 @@ const ParamTransform = (() => {
             });
             txt += line('-'.repeat(78));
             txt += line('');
+            
+            // pdal filters 格式 
+            txt += line('// PDAL Transformation filters:');
+            txt += line('-'.repeat(78));
+            txt += line(`{\n  "type": "filters.transformation",`);
+            txt += line(`  "matrix": "${mat.flat().map(v => v.toFixed(12)).join(' ')}"\n}`);
+            txt += line('-'.repeat(78));
+            txt += line('');
+
+
+            
             txt += line('【各点残差】');
             const ptIds = res.ptIds || res.residuals.map((_, i) => String(i + 1));
             res.residuals.forEach((r, i) => {
